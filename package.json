@@ -1,0 +1,52 @@
+{
+  "name": "sp-focus-tracker",
+  "version": "0.1.0",
+  "description": "FocusTracker AI - Desktop productivity app with AI-powered focus analysis",
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "concurrently \"vite\" \"wait-on http://localhost:5173 && cross-env NODE_ENV=development electron .\"",
+    "build": "vite build && electron-builder",
+    "preview": "vite preview",
+    "electron": "cross-env NODE_ENV=development electron .",
+    "prisma:push": "prisma db push",
+    "prisma:studio": "prisma studio",
+    "prisma:generate": "prisma generate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "build": {
+    "appId": "com.focustracker.app",
+    "productName": "FocusTracker",
+    "files": ["electron/**/*", "dist/**/*", "node_modules/**/*"],
+    "linux": { "icon": "electron/assets/icon.png", "target": ["AppImage"] },
+    "win": { "icon": "electron/assets/icon.png" },
+    "mac": { "icon": "electron/assets/icon.png" }
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.2.4",
+    "@vitejs/plugin-react": "^6.0.1",
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^42.0.0",
+    "electron-builder": "^26.8.1",
+    "tailwindcss": "^4.2.4",
+    "vite": "^8.0.11",
+    "wait-on": "^9.0.5"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1044.0",
+    "@aws-sdk/s3-request-presigner": "^3.1044.0",
+    "@huggingface/inference": "^4.13.15",
+    "@prisma/client": "^6.19.3",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.4.2",
+    "framer-motion": "^12.38.0",
+    "jsonwebtoken": "^9.0.3",
+    "keytar": "^7.9.0",
+    "node-schedule": "^2.1.1",
+    "prisma": "^6.19.3",
+    "recharts": "^3.8.1",
+    "sharp": "^0.34.5"
+  }
+}

@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  username     String?
+  passwordHash String
+  createdAt    DateTime  @default(now())
+  todos        Todo[]
+  sessions     Session[]
+}
+
+model Todo {
+  id              Int       @id @default(autoincrement())
+  userId          Int
+  taskName        String
+  scheduledTime   String
+  durationMinutes Int
+  isCompleted     Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+  user            User      @relation(fields: [userId], references: [id])
+  sessions        Session[]
+}
+
+model Session {
+  id                 Int      @id @default(autoincrement())
+  userId             Int
+  todoId             Int?
+  taskName           String
+  focusScore         Float?
+  totalScreenshots   Int?
+  focusedCount       Int?
+  distractedCount    Int?
+  aiSummary          String?
+  distractionDetails String?
+  screenshotUrls     String[]
+  startedAt          DateTime?
+  completedAt        DateTime?
+  user               User     @relation(fields: [userId], references: [id])
+  todo               Todo?    @relation(fields: [todoId], references: [id], onDelete: SetNull)
+}
