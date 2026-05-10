@@ -1,0 +1,28 @@
+.shell {
+  display: flex;
+  height: 100vh;
+  background: #07070f;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.gridOverlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(139, 92, 246, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.025) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.main {
+  position: relative;
+  z-index: 10;
+  flex: 1;
+  overflow: auto;
+  padding: 34px 40px;
+}

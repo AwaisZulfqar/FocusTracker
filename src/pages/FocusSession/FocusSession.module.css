@@ -1,0 +1,109 @@
+.page {
+  min-height: 100vh;
+  background: #07070f;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+}
+
+.center {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.recBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  margin-bottom: 26px;
+}
+
+.recDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 8px #ef4444;
+}
+
+.recText {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #fca5a5;
+  letter-spacing: 0.16em;
+}
+
+.sessionLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.taskName {
+  font-size: 26px;
+  font-weight: 800;
+  margin: 8px 0 36px;
+  letter-spacing: -0.5px;
+}
+
+.statsRow {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.lockHint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.22);
+  margin-top: 28px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.bigSpinner {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 3px solid rgba(139, 92, 246, 0.18);
+  border-top-color: #a855f7;
+  margin-bottom: 24px;
+}
+
+.analyzingTitle {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.4px;
+}
+
+.analyzingSub {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.42);
+  margin-top: 6px;
+}
+
+.analyzingHint {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.22);
+  margin-top: 4px;
+}

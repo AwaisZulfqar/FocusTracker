@@ -1,0 +1,6 @@
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(168, 85, 247, 0.7);
+  pointer-events: none;
+}

@@ -1,0 +1,108 @@
+.wrap {
+  position: relative;
+  border-radius: 14px;
+}
+
+.glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(34, 211, 238, 0.04), rgba(124, 58, 237, 0.04));
+  z-index: -1;
+}
+
+.card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: rgba(12, 12, 22, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+}
+
+.left {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+}
+
+.accent {
+  width: 4px;
+  height: 36px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.body {
+  min-width: 0;
+  flex: 1;
+}
+
+.name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.36);
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.sep {
+  opacity: 0.5;
+}
+
+.summary {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.55;
+  margin-top: 8px;
+}
+
+.score {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.scoreVal {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.1;
+  letter-spacing: -0.4px;
+}
+
+.counts {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-end;
+  margin-top: 4px;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.focused {
+  color: #4ade80;
+}
+
+.distracted {
+  color: #f87171;
+}
+
+.slash {
+  color: rgba(255, 255, 255, 0.2);
+}

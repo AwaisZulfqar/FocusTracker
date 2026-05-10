@@ -1,0 +1,273 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #07070f;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.gridOverlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.cardWrap {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 440px;
+  margin: 0 20px;
+}
+
+.cardGlow {
+  position: absolute;
+  inset: -1px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.45) 0%, rgba(34, 211, 238, 0.15) 50%, rgba(124, 58, 237, 0.1) 100%);
+  filter: blur(1px);
+  z-index: -1;
+}
+
+.card {
+  background: rgba(10, 10, 18, 0.92);
+  border-radius: 20px;
+  padding: 34px 30px 28px;
+  backdrop-filter: blur(60px);
+  -webkit-backdrop-filter: blur(60px);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.6), transparent);
+}
+
+.logoSection {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.logoWrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 50%, #a855f7 100%);
+  box-shadow: 0 10px 32px rgba(124, 58, 237, 0.5), 0 0 0 1px rgba(168, 85, 247, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.logoBolt {
+  font-size: 22px;
+  position: relative;
+  z-index: 1;
+}
+
+.logoRing {
+  position: absolute;
+  inset: -3px;
+  border-radius: 19px;
+  border: 1.5px solid transparent;
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.6), rgba(34, 211, 238, 0.3), rgba(168, 85, 247, 0.1)) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+}
+
+.brand {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.4px;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.tagline {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.38);
+  margin-top: 2px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.tabBar {
+  display: flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 4px;
+  gap: 4px;
+  margin-bottom: 22px;
+}
+
+.tab {
+  flex: 1;
+  padding: 8px 0;
+  border-radius: 9px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+  font-family: inherit;
+}
+
+.tabActive {
+  background: rgba(124, 58, 237, 0.2);
+  color: #fff;
+  border: 1px solid rgba(124, 58, 237, 0.3);
+}
+
+.tabIndicator {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30%;
+  height: 2px;
+  background: linear-gradient(90deg, #7c3aed, #a855f7);
+  border-radius: 2px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.dividerLine {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.dividerText {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.24);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.forgotBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.32);
+  padding: 5px 0 0;
+  display: block;
+  text-align: right;
+  width: 100%;
+  transition: color 0.2s;
+  font-family: inherit;
+}
+
+.errorBox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 13px;
+  border-radius: 9px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  font-size: 12px;
+  overflow: hidden;
+}
+
+.errorIcon {
+  font-size: 14px;
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 13px 16px;
+  border-radius: 11px;
+  border: none;
+  background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 40%, #a855f7 75%, #38bdf8 100%);
+  background-size: 200% 200%;
+  color: #fff;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: filter 0.2s, box-shadow 0.2s;
+  box-shadow: 0 8px 28px rgba(124, 58, 237, 0.45);
+  margin-top: 4px;
+  font-family: inherit;
+}
+
+.btnRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btnArrow {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.spinner {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: #fff;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 22px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.32);
+  line-height: 1;
+}
+
+.switchBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  color: #a78bfa;
+  padding: 0;
+  margin-left: 4px;
+  transition: color 0.15s;
+  font-family: inherit;
+}

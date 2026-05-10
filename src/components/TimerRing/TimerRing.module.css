@@ -1,0 +1,54 @@
+.ringWrap {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  margin-bottom: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.halo {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(139, 92, 246, 0.15), rgba(34, 211, 238, 0.05), rgba(139, 92, 246, 0.15));
+  filter: blur(20px);
+  z-index: 0;
+}
+
+.svg {
+  transform: rotate(-90deg);
+  position: relative;
+  z-index: 2;
+}
+
+.center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.time {
+  font-size: 56px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -1px;
+  font-family: 'JetBrains Mono', 'Inter', monospace;
+  background: linear-gradient(135deg, #fff 0%, #c4b5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+
+.remaining {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.32);
+  letter-spacing: 0.2em;
+  margin-top: 8px;
+}

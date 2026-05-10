@@ -1,0 +1,53 @@
+.wrap {
+  position: relative;
+  border-radius: 16px;
+}
+
+.glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: 17px;
+  z-index: -1;
+}
+
+.card {
+  position: relative;
+  background: rgba(10, 10, 18, 0.85);
+  border-radius: 16px;
+  padding: 16px;
+  backdrop-filter: blur(20px);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.label {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.value {
+  font-size: 26px;
+  font-weight: 800;
+  margin: 4px 0 4px;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+}
+
+.hint {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.32);
+  margin: 0;
+  font-weight: 500;
+}
