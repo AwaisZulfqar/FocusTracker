@@ -1,17 +1,20 @@
 const { ipcMain } = require('electron')
 const keytar = require('keytar')
 const { getPrisma } = require('../services/prisma')
-const { scheduleAlarm } = require('../services/scheduler')
+const { scheduleAlarm, schedulePendingAlarms, cancelAlarm } = require('../services/scheduler')
 
 ipcMain.handle('todos:get', async () => {
   const userId = await keytar.getPassword('focus-tracker', 'current-user')
   if (!userId) return []
 
   const prisma = getPrisma()
-  return prisma.todo.findMany({
+  const todos = await prisma.todo.findMany({
     where: { userId: Number(userId) },
     orderBy: { scheduledTime: 'asc' },
   })
+
+  schedulePendingAlarms(todos)
+  return todos
 })
 
 ipcMain.handle('todos:add', async (_, { taskName, scheduledTime, durationMinutes }) => {
@@ -28,12 +31,14 @@ ipcMain.handle('todos:add', async (_, { taskName, scheduledTime, durationMinutes
 
 ipcMain.handle('todos:delete', async (_, id) => {
   const prisma = getPrisma()
+  cancelAlarm(id)
   await prisma.todo.delete({ where: { id } })
   return { success: true }
 })
 
 ipcMain.handle('todos:complete', async (_, id) => {
   const prisma = getPrisma()
+  cancelAlarm(id)
   await prisma.todo.update({ where: { id }, data: { isCompleted: true } })
   return { success: true }
 })

@@ -1,0 +1,1110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>FocusTracker AI - Project Documentation</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      color: #172033;
+      background: #e5e7eb;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.42;
+    }
+
+    .page {
+      position: relative;
+      width: 210mm;
+      height: 297mm;
+      margin: 0 auto;
+      padding: 15mm 16mm 13mm;
+      overflow: hidden;
+      background: #ffffff;
+      break-after: page;
+      page-break-after: always;
+    }
+
+    .page:last-child {
+      break-after: auto;
+      page-break-after: auto;
+    }
+
+    .cover {
+      color: #ffffff;
+      background:
+        linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(49, 46, 129, 0.96)),
+        radial-gradient(circle at 78% 18%, rgba(14, 165, 233, 0.42), transparent 30%),
+        radial-gradient(circle at 10% 82%, rgba(34, 197, 94, 0.28), transparent 28%);
+    }
+
+    .kicker {
+      display: inline-block;
+      padding: 6px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.32);
+      border-radius: 999px;
+      color: rgba(255, 255, 255, 0.86);
+      font-size: 8.2pt;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .cover h1 {
+      margin: 34mm 0 5mm;
+      max-width: 148mm;
+      font-size: 38pt;
+      line-height: 1.03;
+      letter-spacing: -0.02em;
+    }
+
+    .cover .subtitle {
+      max-width: 143mm;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 14pt;
+      line-height: 1.45;
+    }
+
+    .group-panel {
+      position: relative;
+      margin-top: 10mm;
+      padding: 5mm;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 6mm;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+      box-shadow: 0 18px 50px rgba(15, 23, 42, 0.28);
+    }
+
+    .group-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(circle at 92% 12%, rgba(56, 189, 248, 0.26), transparent 30%);
+      pointer-events: none;
+    }
+
+    .group-panel > * {
+      position: relative;
+    }
+
+    .group-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-left: 4px;
+      gap: 4mm;
+      margin-bottom: 4mm;
+    }
+
+    .group-title span {
+      color: rgba(255, 255, 255, 0.58);
+      font-size: 7.8pt;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .group-title strong {
+      color: #ffffff;
+      font-size: 13pt;
+    }
+
+    .teacher-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3.5mm;
+      padding: 3mm 3.5mm;
+      border-radius: 4mm;
+      background: rgba(255, 255, 255, 0.29);
+    }
+
+    .teacher-card span,
+    .member-roll {
+      color: rgba(255, 255, 255, 0.42);
+      font-size: 7.6pt;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .teacher-card strong {
+      color: #f2f7fb;
+      font-size: 10.8pt;
+    }
+
+    .members {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2.4mm;
+    }
+
+    .member {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 3mm;
+      min-height: 11mm;
+      padding: 2.5mm 3mm;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 3.5mm;
+      background: rgba(15, 23, 42, 0.26);
+    }
+
+    .member-name {
+      color: rgba(255, 255, 255, 0.92);
+      font-size: 9.3pt;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .member-roll {
+      flex: 0 0 auto;
+      color: #bae6fd;
+    }
+
+    .cover-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4mm;
+      margin-top: 9mm;
+    }
+
+    .cover-card {
+      min-height: 25mm;
+      padding: 5mm;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 5mm;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .cover-card strong {
+      display: block;
+      margin-bottom: 2mm;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 7.7pt;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .cover-foot {
+      position: absolute;
+      right: 16mm;
+      bottom: 14mm;
+      left: 16mm;
+      display: flex;
+      justify-content: space-between;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 9pt;
+    }
+
+    h2 {
+      margin: 0 0 3mm;
+      color: #0f172a;
+      font-size: 22pt;
+      line-height: 1.15;
+      letter-spacing: -0.015em;
+    }
+
+    h3 {
+      margin: 5mm 0 2mm;
+      color: #1f2937;
+      font-size: 12.2pt;
+      line-height: 1.2;
+    }
+
+    p {
+      margin: 0 0 3mm;
+    }
+
+    .lead {
+      max-width: 170mm;
+      color: #475569;
+      font-size: 11.1pt;
+      line-height: 1.5;
+    }
+
+    .section-label {
+      margin-bottom: 2mm;
+      color: #4f46e5;
+      font-size: 8pt;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .page-num {
+      position: absolute;
+      right: 16mm;
+      bottom: 7mm;
+      color: #94a3b8;
+      font-size: 8.5pt;
+    }
+
+    .rule {
+      height: 1px;
+      margin: 4mm 0 5mm;
+      background: #e5e7eb;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5mm;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 4mm;
+    }
+
+    .card {
+      padding: 4mm;
+      border: 1px solid #e5e7eb;
+      border-radius: 4mm;
+      background: #f8fafc;
+      break-inside: avoid;
+    }
+
+    .card strong {
+      display: block;
+      margin-bottom: 1.5mm;
+      color: #111827;
+      font-size: 9.3pt;
+    }
+
+    .metric {
+      padding: 4mm;
+      border: 1px solid #dbeafe;
+      border-radius: 4mm;
+      background: #eff6ff;
+    }
+
+    .metric .value {
+      display: block;
+      color: #1d4ed8;
+      font-size: 18pt;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .metric .label {
+      display: block;
+      margin-top: 1.5mm;
+      color: #475569;
+      font-size: 8.4pt;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 3mm 0 4mm;
+      font-size: 8.8pt;
+      break-inside: avoid;
+    }
+
+    th {
+      padding: 2.4mm 2.7mm;
+      color: #ffffff;
+      background: #4338ca;
+      text-align: left;
+      font-size: 8pt;
+      letter-spacing: 0.02em;
+    }
+
+    td {
+      padding: 2.4mm 2.7mm;
+      border-bottom: 1px solid #e5e7eb;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    ul,
+    ol {
+      margin: 2mm 0 0;
+      padding-left: 5mm;
+    }
+
+    li {
+      margin: 1.3mm 0;
+    }
+
+    code {
+      padding: 0.3mm 1.2mm;
+      border-radius: 1.2mm;
+      color: #4338ca;
+      background: #eef2ff;
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 8.5pt;
+    }
+
+    pre {
+      margin: 3mm 0;
+      padding: 4mm;
+      overflow: hidden;
+      border-radius: 4mm;
+      color: #e5e7eb;
+      background: #0f172a;
+      font-family: "JetBrains Mono", Consolas, monospace;
+      font-size: 8.2pt;
+      line-height: 1.38;
+      white-space: pre-wrap;
+      break-inside: avoid;
+    }
+
+    .toc {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 3mm;
+      margin-top: 6mm;
+    }
+
+    .toc-item {
+      min-height: 23mm;
+      padding: 3.5mm;
+      border: 1px solid #ddd6fe;
+      border-radius: 4mm;
+      background: #f5f3ff;
+    }
+
+    .toc-item span {
+      display: block;
+      margin-bottom: 2mm;
+      color: #6d28d9;
+      font-size: 8pt;
+      font-weight: 800;
+    }
+
+    .toc-item strong {
+      color: #111827;
+      font-size: 9.2pt;
+    }
+
+    .note {
+      margin: 4mm 0;
+      padding: 3.5mm 4mm;
+      border-left: 4px solid #0891b2;
+      border-radius: 3mm;
+      color: #164e63;
+      background: #ecfeff;
+      break-inside: avoid;
+    }
+
+    .warning {
+      margin: 4mm 0;
+      padding: 3.5mm 4mm;
+      border-left: 4px solid #f59e0b;
+      border-radius: 3mm;
+      color: #78350f;
+      background: #fffbeb;
+      break-inside: avoid;
+    }
+
+    .diagram {
+      width: 100%;
+      margin: 4mm 0;
+      border: 1px solid #e5e7eb;
+      border-radius: 4mm;
+      background: #ffffff;
+      break-inside: avoid;
+    }
+
+    svg text {
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+    }
+
+    .tree {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4mm;
+      margin-top: 4mm;
+    }
+
+    .tree-box {
+      padding: 3.5mm;
+      border-radius: 4mm;
+      border: 1px solid #e5e7eb;
+      background: #f8fafc;
+    }
+
+    .tree-box h3 {
+      margin-top: 0;
+      font-size: 10.6pt;
+    }
+
+    .tree-box pre {
+      margin: 0;
+      padding: 0;
+      color: #334155;
+      background: transparent;
+      font-size: 7.8pt;
+      line-height: 1.35;
+    }
+
+    .small {
+      color: #64748b;
+      font-size: 8.6pt;
+    }
+
+    .compact-table td,
+    .compact-table th {
+      padding: 2mm 2.2mm;
+      font-size: 8.2pt;
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+
+      .page {
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="page cover">
+    <span class="kicker">Semester Project Documentation</span>
+    <h1>FocusTracker AI</h1>
+    <p class="subtitle">A desktop productivity tracker for scheduled focus sessions, screenshot-based distraction detection, local model training, and productivity reports.</p>
+    <div class="group-panel">
+      <div class="teacher-card">
+        <strong>Course Teacher</strong>
+        <strong>Ms Tayyaba Rasheed</strong>
+      </div>
+      <div class="group-title">
+        <strong>Submitted By:-</strong>
+      </div>
+      <div class="members">
+        <div class="member"><span class="member-name">Hafiz Awais Zulfqar</span><span class="member-roll">1067</span></div>
+        <div class="member"><span class="member-name">M Hassnain Pervez</span><span class="member-roll">1097</span></div>
+        <div class="member"><span class="member-name">Aqeel Ahmad</span><span class="member-roll">1062</span></div>
+        <div class="member"><span class="member-name">Abu Hurraira</span><span class="member-roll">1082</span></div>
+        <div class="member"><span class="member-name">Saif Riaz</span><span class="member-roll">1109</span></div>
+      </div>
+    </div>
+    <div class="cover-grid">
+      <div class="cover-card"><strong>Project Type</strong>Electron desktop application</div>
+      <div class="cover-card"><strong>Core Stack</strong>React, Vite, Electron, Prisma, PostgreSQL</div>
+      <div class="cover-card"><strong>ML Scope</strong>Dataset preprocessing, training, analysis, evaluation</div>
+      <div class="cover-card"><strong>Current Model</strong>Local logistic regression model trained on real screenshots</div>
+    </div>
+    <div class="cover-foot">
+      <span>Repository: sp-focus-tracker</span>
+      <span>May 2026</span>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="section-label">Page 02</div>
+    <h2>Documentation Map</h2>
+    <p class="lead">This report is organized as a 15-page technical document. It covers the app structure, frontend, Electron backend, database relations, ML pipeline, trained model outputs, setup, and testing flow.</p>
+    <div class="toc">
+      <div class="toc-item"><span>01</span><strong>Cover</strong><br>Project identity and stack summary.</div>
+      <div class="toc-item"><span>02</span><strong>Map</strong><br>Report page sequence.</div>
+      <div class="toc-item"><span>03</span><strong>Overview</strong><br>Problem, objective, scope.</div>
+      <div class="toc-item"><span>04</span><strong>Technology</strong><br>Project stack by layer.</div>
+      <div class="toc-item"><span>05</span><strong>Architecture</strong><br>Renderer, main process, services.</div>
+      <div class="toc-item"><span>06</span><strong>Folders</strong><br>Visual folder structure.</div>
+      <div class="toc-item"><span>07</span><strong>Frontend</strong><br>React pages and components.</div>
+      <div class="toc-item"><span>08</span><strong>Electron</strong><br>Main, preload, IPC, services.</div>
+      <div class="toc-item"><span>09</span><strong>Authentication</strong><br>Signup, login, saved session.</div>
+      <div class="toc-item"><span>10</span><strong>Sessions</strong><br>Task, alarm, focus timer.</div>
+      <div class="toc-item"><span>11</span><strong>AI Analysis</strong><br>Screenshot and local model flow.</div>
+      <div class="toc-item"><span>12</span><strong>ER Diagram</strong><br>Database models and relations.</div>
+      <div class="toc-item"><span>13</span><strong>Database</strong><br>Model fields and relation details.</div>
+      <div class="toc-item"><span>14</span><strong>ML Pipeline</strong><br>Dataset, training, evaluation.</div>
+      <div class="toc-item"><span>15</span><strong>Setup</strong><br>Commands, testing, future work.</div>
+    </div>
+    <div class="note">The document is built with fixed A4 page sections to prevent the broken card and table splitting shown in the previous PDF.</div>
+    <span class="page-num">02 / 15</span>
+  </section>
+
+  <section class="page">
+    <div class="section-label">Page 03</div>
+    <h2>Project Overview</h2>
+    <p class="lead">FocusTracker AI helps a user plan focus tasks, run timed sessions, capture screenshots during the session, classify screenshots as focused or distracted, and review historical performance.</p>
+    <div class="grid-3">
+      <div class="metric"><span class="value">64</span><span class="label">Real screenshots in current dataset</span></div>
+      <div class="metric"><span class="value">34</span><span class="label">Focused training images</span></div>
+      <div class="metric"><span class="value">30</span><span class="label">Distracted training images</span></div>
+    </div>
+    <h3>Main Objectives</h3>
+    <div class="grid-2">
+      <div class="card"><strong>Planning</strong>Create tasks with task name, scheduled time, and focus duration.</div>
+      <div class="card"><strong>Focus Mode</strong>Start a session from an alarm or dashboard action and keep a strict timer visible.</div>
+      <div class="card"><strong>Evidence Capture</strong>Take screenshots during the focus session using the Electron desktop layer.</div>
+      <div class="card"><strong>Local Analysis</strong>Run a trained local model to classify focused and distracted screen activity.</div>
+      <div class="card"><strong>Reports</strong>Store session summaries and show focus trends, best score, and recent history.</div>
+      <div class="card"><strong>Academic ML</strong>Provide a complete local ML workflow: preprocess, train, evaluate, analyze.</div>
+    </div>
+    <h3>Scope</h3>
+    <table>
+      <tr><th>Area</th><th>Included In This Project</th></tr>
+      <tr><td>Desktop app</td><td>Electron shell, secure preload bridge, React renderer, local app flow.</td></tr>
+      <tr><td>Productivity</td><td>Todo scheduling, alarms, focus sessions, score summaries, reports.</td></tr>
+      <tr><td>AI / ML</td><td>Local image feature extraction and binary focused/distracted classifier.</td></tr>
+      <tr><td>Data</td><td>PostgreSQL database through Prisma models for users, todos, and sessions.</td></tr>
+    </table>
+    <span class="page-num">03 / 15</span>
+  </section>
+
+  <section class="page">
+    <div class="section-label">Page 04</div>
+    <h2>Technology Stack</h2>
+    <p class="lead">The project uses a desktop-first stack. React handles the interface, Electron handles desktop access, Prisma handles database access, and the local ML folder handles model training and prediction.</p>
+    <table class="compact-table">
+      <tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr>
+      <tr><td>Desktop shell</td><td>Electron</td><td>Runs the app as a native desktop application and provides main-process APIs.</td></tr>
+      <tr><td>Frontend</td><td>React</td><td>Builds the Auth, Dashboard, Focus Session, and Reports screens.</td></tr>
+      <tr><td>Build tool</td><td>Vite</td><td>Runs fast local development and creates frontend build output.</td></tr>
+      <tr><td>UI motion</td><td>Framer Motion</td><td>Provides transitions and page/component animation.</td></tr>
+      <tr><td>Charts</td><td>Recharts</td><td>Displays focus trends in the reports screen.</td></tr>
+      <tr><td>Database ORM</td><td>Prisma</td><td>Maps JavaScript service calls to PostgreSQL models.</td></tr>
+      <tr><td>Database</td><td>PostgreSQL</td><td>Stores users, tasks, and focus session results.</td></tr>
+      <tr><td>Security</td><td>bcryptjs, keytar</td><td>Hashes passwords and stores the current user ID securely.</td></tr>
+      <tr><td>Scheduling</td><td>node-schedule</td><td>Schedules task alarms from todo data.</td></tr>
+      <tr><td>Images</td><td>sharp</td><td>Compresses screenshots and extracts ML image features.</td></tr>
+      <tr><td>Cloud-ready storage</td><td>AWS S3/R2 SDK</td><td>Provides object storage support through the R2 service file.</td></tr>
+      <tr><td>Local ML</td><td>Node.js scripts</td><td>Preprocesses screenshots, trains the model, evaluates it, and predicts one image.</td></tr>
+    </table>
+    <div class="grid-2">
+      <div class="card"><strong>Main app command</strong><code>npm run dev</code><br><span class="small">Runs Vite and Electron together for development.</span></div>
+      <div class="card"><strong>Model command</strong><code>npm run ml:all</code><br><span class="small">Runs preprocessing, training, and evaluation.</span></div>
+    </div>
+    <span class="page-num">04 / 15</span>
+  </section>
+
+  <section class="page">
+    <div class="section-label">Page 05</div>
+    <h2>System Architecture</h2>
+    <p class="lead">The app has two major runtime areas: the React renderer process and the Electron main process. The preload file exposes a controlled API between them.</p>
+    <svg class="diagram" viewBox="0 0 1040 520" role="img" aria-label="System architecture diagram">
+      <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto">
+          <path d="M0,0 L10,4 L0,8 Z" fill="#475569"></path>
+        </marker>
+      </defs>
+      <rect x="28" y="42" width="280" height="390" rx="18" fill="#eef2ff" stroke="#c7d2fe"></rect>
+      <text x="54" y="82" font-size="28" font-weight="800" fill="#312e81">React Renderer</text>
+      <rect x="54" y="110" width="228" height="54" rx="12" fill="#fff" stroke="#c7d2fe"></rect>
+      <text x="74" y="144" font-size="18" fill="#334155">Auth / Dashboard / Reports</text>
+      <rect x="54" y="184" width="228" height="54" rx="12" fill="#fff" stroke="#c7d2fe"></rect>
+      <text x="74" y="218" font-size="18" fill="#334155">Focus Session UI</text>
+      <rect x="54" y="258" width="228" height="54" rx="12" fill="#fff" stroke="#c7d2fe"></rect>
+      <text x="74" y="292" font-size="18" fill="#334155">Reusable Components</text>
+      <rect x="54" y="332" width="228" height="54" rx="12" fill="#fff" stroke="#c7d2fe"></rect>
+      <text x="74" y="366" font-size="18" fill="#334155">window.api Calls</text>
+
+      <rect x="380" y="62" width="260" height="350" rx="18" fill="#ecfeff" stroke="#a5f3fc"></rect>
+      <text x="410" y="102" font-size="28" font-weight="800" fill="#155e75">Electron Bridge</text>
+      <rect x="408" y="138" width="204" height="66" rx="12" fill="#fff" stroke="#a5f3fc"></rect>
+      <text x="444" y="178" font-size="20" fill="#334155">preload.js</text>
+      <rect x="408" y="232" width="204" height="66" rx="12" fill="#fff" stroke="#a5f3fc"></rect>
+      <text x="456" y="272" font-size="20" fill="#334155">IPC Channels</text>
+      <rect x="408" y="326" width="204" height="48" rx="12" fill="#fff" stroke="#a5f3fc"></rect>
+      <text x="438" y="356" font-size="18" fill="#334155">Secure boundary</text>
+
+      <rect x="712" y="42" width="300" height="390" rx="18" fill="#f0fdf4" stroke="#bbf7d0"></rect>
+      <text x="744" y="82" font-size="28" font-weight="800" fill="#166534">Main Process</text>
+      <rect x="744" y="110" width="236" height="48" rx="12" fill="#fff" stroke="#bbf7d0"></rect>
+      <text x="772" y="140" font-size="18" fill="#334155">IPC handlers</text>
+      <rect x="744" y="176" width="236" height="48" rx="12" fill="#fff" stroke="#bbf7d0"></rect>
+      <text x="772" y="206" font-size="18" fill="#334155">Prisma service</text>
+      <rect x="744" y="242" width="236" height="48" rx="12" fill="#fff" stroke="#bbf7d0"></rect>
+      <text x="772" y="272" font-size="18" fill="#334155">Scheduler service</text>
+      <rect x="744" y="308" width="236" height="48" rx="12" fill="#fff" stroke="#bbf7d0"></rect>
+      <text x="772" y="338" font-size="18" fill="#334155">Screenshot service</text>
+      <rect x="744" y="374" width="236" height="48" rx="12" fill="#fff" stroke="#bbf7d0"></rect>
+      <text x="772" y="404" font-size="18" fill="#334155">AI worker + model</text>
+
+      <path d="M308 240 C338 240 348 240 380 240" stroke="#475569" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+      <path d="M640 240 C672 240 682 240 712 240" stroke="#475569" stroke-width="3" fill="none" marker-end="url(#arrow)"></path>
+      <text x="323" y="226" font-size="15" fill="#475569">window.api</text>
+      <text x="655" y="226" font-size="15" fill="#475569">ipcMain</text>
+    </svg>
+    <table>
+      <tr><th>Area</th><th>Main Files</th><th>Role</th></tr>
+      <tr><td>Renderer</td><td><code>src/main.jsx</code>, <code>src/components/App/App.jsx</code></td><td>Loads the React app and controls screen-level navigation.</td></tr>
+      <tr><td>Bridge</td><td><code>electron/preload.js</code></td><td>Exposes safe methods to the renderer.</td></tr>
+      <tr><td>Main process</td><td><code>electron/main.js</code></td><td>Creates the window, registers IPC, and controls app-level behavior.</td></tr>
+    </table>
+    <span class="page-num">05 / 15</span>
+  </section>
+
+  <section class="page">
+    <div class="section-label">Page 06</div>
+    <h2>Folder Structure</h2>
+    <p class="lead">The project is separated into frontend source, Electron backend files, Prisma database schema, ML pipeline, documentation, build output, and raw screenshot data.</p>
+    <svg class="diagram" viewBox="0 0 1040 300" role="img" aria-label="Folder structure image">
+      <rect x="38" y="34" width="180" height="64" rx="16" fill="#1e293b"></rect>
+      <text x="72" y="75" font-size="24" font-weight="800" fill="#fff">Project Root</text>
+      <g fill="none" stroke="#94a3b8" stroke-width="3">
+        <path d="M218 66 H324"></path><path d="M324 66 V246"></path>
+        <path d="M324 66 H406"></path><path d="M324 102 H406"></path><path d="M324 138 H406"></path>
+        <path d="M324 174 H406"></path><path d="M324 210 H406"></path><path d="M324 246 H406"></path>
+      </g>
+      <g font-size="20" font-weight="700">
+        <rect x="406" y="42" width="210" height="48" rx="12" fill="#eef2ff" stroke="#c7d2fe"></rect><text x="432" y="73" fill="#312e81">src/ React UI</text>
+        <rect x="406" y="78" width="250" height="48" rx="12" fill="#ecfeff" stroke="#a5f3fc"></rect><text x="432" y="109" fill="#155e75">electron/ Desktop</text>
+        <rect x="406" y="114" width="232" height="48" rx="12" fill="#f0fdf4" stroke="#bbf7d0"></rect><text x="432" y="145" fill="#166534">prisma/ Schema</text>
+        <rect x="406" y="150" width="230" height="48" rx="12" fill="#fff7ed" stroke="#fed7aa"></rect><text x="432" y="181" fill="#9a3412">ml/ Pipeline</text>
+        <rect x="406" y="186" width="225" height="48" rx="12" fill="#f5f3ff" stroke="#ddd6fe"></rect><text x="432" y="217" fill="#6d28d9">docs/ Reports</text>
+        <rect x="406" y="222" width="270" height="48" rx="12" fill="#f8fafc" stroke="#e2e8f0"></rect><text x="432" y="253" fill="#334155">package + config</text>
+      </g>
+      <g font-size="15" fill="#475569">
+        <text x="704" y="73">Pages, components, styles, utilities</text>
+        <text x="704" y="109">main, preload, IPC, services</text>
+        <text x="704" y="145">User, Todo, Session models</text>
+        <text x="704" y="181">Dataset, preprocessing, training, reports</text>
+        <text x="704" y="217">HTML/PDF documentation</text>
+        <text x="704" y="253">Scripts, dependencies, environment example</text>
+      </g>
+    </svg>
+    <div class="tree">
+      <div class="tree-box">
+        <h3>Source Structure</h3>
+        <pre>src/
+  main.jsx
+  pages/
+    Auth/
+    Dashboard/
+    FocusSession/
+    Reports/
+  components/
+    App/
+    Sidebar/
+    TimerRing/
+    TodoCard/
+    SessionCard/
+    ResultScreen/
+    FocusChart/
+    icons/
+  lib/
+  utils/
+  constants/
+  styles/</pre>
+      </div>
+      <div class="tree-box">
+        <h3>Backend And ML Structure</h3>
+        <pre>electron/
+  main.js
+  preload.js
+  ipc/
+    auth.js
+    todos.js
+    session.js
+    reports.js
+  services/
+    prisma.js
+    scheduler.js
+    screenshot.js
+    ai-worker.js
+    r2.js
+
+ml/
+  dataset/raw/
+  processed/
+  models/
+  reports/
+  lib/
+  preprocess.js
+  train.js
+  evaluate.js
+  analyze.js</pre>
+      </div>
+    </div>
+    <span class="page-num">06 / 15</span>
+  </section>
+
+  <section class="page">
+    <div class="section-label">Page 07</div>
+    <h2>Frontend Structure</h2>
+    <p class="lead">The frontend is a React renderer app. The main app controller decides whether to show authentication, dashboard, focus session, or reports.</p>
+    <table>
+      <tr><th>Frontend Area</th><th>Files</th><th>Purpose</th></tr>
+      <tr><td>App shell</td><td><code>src/main.jsx</code>, <code>src/components/App/App.jsx</code></td><td>Mounts React and controls the high-level screen state.</td></tr>
+      <tr><td>Authentication</td><td><code>src/pages/Auth/Auth.jsx</code></td><td>Signup and login screen.</td></tr>
+      <tr><td>Dashboard</td><td><code>src/pages/Dashboard/Dashboard.jsx</code></td><td>Task creation, todo list, alarm modal, session start.</td></tr>
+      <tr><td>Focus session</td><td><code>src/pages/FocusSession/FocusSession.jsx</code></td><td>Active timer, progress ring, session completion UI.</td></tr>
+      <tr><td>Reports</td><td><code>src/pages/Reports/Reports.jsx</code></td><td>Historical focus score summaries and charts.</td></tr>
+    </table>
+    <h3>Reusable Components</h3>
+    <div class="grid-3">
+      <div class="card"><strong>Navigation</strong><code>Sidebar</code><br><code>NavItem</code></div>
+      <div class="card"><strong>Focus UI</strong><code>TimerRing</code><br><code>ResultScreen</code><br><code>AlarmModal</code></div>
+      <div class="card"><strong>Cards</strong><code>TodoCard</code><br><code>SessionCard</code><br><code>StatCard</code></div>
+      <div class="card"><strong>Inputs</strong><code>Field</code><br><code>InputField</code><br><code>StyledInput</code></div>
+      <div class="card"><strong>Charts</strong><code>FocusChart</code><br><code>StatTile</code><br><code>StatPill</code></div>
+      <div class="card"><strong>Visual System</strong><code>Background</code><br><code>Particle</code><br><code>icons/</code></div>
+    </div>
+    <h3>Frontend Reading Order</h3>
+    <ol>
+      <li>Read <code>src/main.jsx</code>.</li>
+      <li>Read <code>src/components/App/App.jsx</code>.</li>
+      <li>Read pages in this order: Auth, Dashboard, FocusSession, Reports.</li>
+      <li>Read shared helpers: <code>src/lib/api.js</code>, <code>src/utils/time.js</code>, <code>src/utils/score.js</code>.</li>
+      <li>Read reusable components only after you understand the pages.</li>
+    </ol>
+    <span class="page-num">07 / 15</span>
+  </section>
+
+  <section class="page">
+    <div class="section-label">Page 08</div>
+    <h2>Electron And IPC Structure</h2>
+    <p class="lead">Electron owns the desktop features that the browser cannot safely access directly. React calls exposed preload methods, preload sends IPC messages, and IPC handlers use backend services.</p>
+    <svg class="diagram" viewBox="0 0 1040 330" role="img" aria-label="Electron IPC flow">
+      <defs>
+        <marker id="arrow2" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto">
+          <path d="M0,0 L10,4 L0,8 Z" fill="#475569"></path>
+        </marker>
+      </defs>
+      <rect x="42" y="90" width="210" height="96" rx="18" fill="#eef2ff" stroke="#c7d2fe"></rect>
+      <text x="82" y="132" font-size="23" font-weight="800" fill="#312e81">React UI</text>
+      <text x="70" y="160" font-size="16" fill="#475569">src/pages + components</text>
+      <rect x="320" y="90" width="210" height="96" rx="18" fill="#ecfeff" stroke="#a5f3fc"></rect>
+      <text x="365" y="132" font-size="23" font-weight="800" fill="#155e75">Preload</text>
+      <text x="360" y="160" font-size="16" fill="#475569">electron/preload.js</text>
+      <rect x="598" y="90" width="210" height="96" rx="18" fill="#f5f3ff" stroke="#ddd6fe"></rect>
+      <text x="648" y="132" font-size="23" font-weight="800" fill="#6d28d9">IPC</text>
+      <text x="638" y="160" font-size="16" fill="#475569">electron/ipc/*.js</text>
+      <rect x="382" y="232" width="328" height="62" rx="18" fill="#f0fdf4" stroke="#bbf7d0"></rect>
+      <text x="444" y="270" font-size="22" font-weight="800" fill="#166534">Services + Database + ML</text>
+      <path d="M252 138 H320" stroke="#475569" stroke-width="3" marker-end="url(#arrow2)"></path>
+      <path d="M530 138 H598" stroke="#475569" stroke-width="3" marker-end="url(#arrow2)"></path>
+      <path d="M704 186 C704 216 646 232 632 232" stroke="#475569" stroke-width="3" fill="none" marker-end="url(#arrow2)"></path>
+      <path d="M488 232 C470 216 426 202 426 186" stroke="#475569" stroke-width="3" fill="none" marker-end="url(#arrow2)"></path>
+      <text x="266" y="126" font-size="14" fill="#475569">window.api</text>
+      <text x="544" y="126" font-size="14" fill="#475569">ipcRenderer</text>
+    </svg>
+    <table>
+      <tr><th>File</th><th>What To Understand</th></tr>
+      <tr><td><code>electron/main.js</code></td><td>App window creation, preload loading, IPC registration, session close protection.</td></tr>
+      <tr><td><code>electron/preload.js</code></td><td>The public API exposed to the React renderer.</td></tr>
+      <tr><td><code>electron/ipc/auth.js</code></td><td>Signup, login, logout, saved current user lookup.</td></tr>
+      <tr><td><code>electron/ipc/todos.js</code></td><td>Todo create, read, update, delete, scheduling integration.</td></tr>
+      <tr><td><code>electron/ipc/session.js</code></td><td>Focus session creation, timer, screenshot capture, completion.</td></tr>
+      <tr><td><code>electron/ipc/reports.js</code></td><td>Report data retrieval and summary preparation.</td></tr>
+    </table>
+    <span class="page-num">08 / 15</span>
+  </section>
+
+  <section class="page">
+    <div class="section-label">Page 09</div>
+    <h2>Authentication Flow</h2>
+    <p class="lead">Authentication uses React input forms, IPC calls, bcrypt password hashing, Prisma database access, and Keytar for saved session identity.</p>
+    <svg class="diagram" viewBox="0 0 1040 330" role="img" aria-label="Authentication flow diagram">
+      <defs>
+        <marker id="arrow3" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto">
+          <path d="M0,0 L10,4 L0,8 Z" fill="#475569"></path>
+        </marker>
+      </defs>
+      <g>
+        <rect x="46" y="78" width="170" height="86" rx="16" fill="#eef2ff" stroke="#c7d2fe"></rect>
+        <text x="76" y="112" font-size="20" font-weight="800" fill="#312e81">Step 1</text>
+        <text x="70" y="140" font-size="15" fill="#334155">User enters form</text>
+      </g>
+      <g>
+        <rect x="276" y="78" width="170" height="86" rx="16" fill="#ecfeff" stroke="#a5f3fc"></rect>
+        <text x="306" y="112" font-size="20" font-weight="800" fill="#155e75">Step 2</text>
+        <text x="298" y="140" font-size="15" fill="#334155">Preload sends IPC</text>
+      </g>
+      <g>
+        <rect x="506" y="78" width="170" height="86" rx="16" fill="#f5f3ff" stroke="#ddd6fe"></rect>
+        <text x="536" y="112" font-size="20" font-weight="800" fill="#6d28d9">Step 3</text>
+        <text x="528" y="140" font-size="15" fill="#334155">Auth handler runs</text>
+      </g>
+      <g>
+        <rect x="736" y="78" width="170" height="86" rx="16" fill="#f0fdf4" stroke="#bbf7d0"></rect>
+        <text x="766" y="112" font-size="20" font-weight="800" fill="#166534">Step 4</text>
+        <text x="758" y="140" font-size="15" fill="#334155">User session saved</text>
+      </g>
+      <path d="M216 121 H276" stroke="#475569" stroke-width="3" marker-end="url(#arrow3)"></path>
+      <path d="M446 121 H506" stroke="#475569" stroke-width="3" marker-end="url(#arrow3)"></path>
+      <path d="M676 121 H736" stroke="#475569" stroke-width="3" marker-end="url(#arrow3)"></path>
+      <rect x="150" y="224" width="322" height="54" rx="14" fill="#fff7ed" stroke="#fed7aa"></rect>
+      <text x="176" y="257" font-size="15" fill="#9a3412">bcrypt compares or hashes password</text>
+      <rect x="512" y="224" width="180" height="54" rx="14" fill="#eff6ff" stroke="#bfdbfe"></rect>
+      <text x="542" y="257" font-size="16" fill="#1d4ed8">Prisma reads User</text>
+      <rect x="732" y="224" width="180" height="54" rx="14" fill="#f0fdf4" stroke="#bbf7d0"></rect>
+      <text x="770" y="257" font-size="16" fill="#166534">Keytar saves ID</text>
+    </svg>
+    <div class="grid-2">
+      <div class="card"><strong>Signup path</strong>User data goes from <code>Auth.jsx</code> to <code>auth:signup</code>. Password is hashed, user is created, and current user ID is saved.</div>
+      <div class="card"><strong>Login path</strong>Email lookup runs through Prisma, password hash is checked with bcrypt, and the saved user ID opens the dashboard.</div>
+      <div class="card"><strong>Startup path</strong><code>App.jsx</code> calls <code>api.getUser()</code>. If a saved user exists, Auth is skipped.</div>
+      <div class="card"><strong>Logout path</strong>The current user ID is cleared from Keytar and the app returns to Auth.</div>
+    </div>
+    <div class="note">The saved session is not fake login bypass. It is a restored local session from Keytar.</div>
+    <span class="page-num">09 / 15</span>
+  </section>
+
+  <section class="page">
+    <div class="section-label">Page 10</div>
+    <h2>Tasks, Alarms, And Focus Sessions</h2>
+    <p class="lead">The normal app workflow starts from a todo task, schedules an alarm, starts a focus session, captures screenshots, analyzes them, and saves the final result.</p>
+    <svg class="diagram" viewBox="0 0 1040 330" role="img" aria-label="Focus session flow">
+      <defs>
+        <marker id="arrow4" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto">
+          <path d="M0,0 L10,4 L0,8 Z" fill="#475569"></path>
+        </marker>
+      </defs>
+      <g font-size="16" fill="#334155">
+        <rect x="40" y="90" width="140" height="76" rx="16" fill="#eef2ff" stroke="#c7d2fe"></rect><text x="72" y="122" font-weight="800" fill="#312e81">Todo</text><text x="64" y="148">Task saved</text>
+        <rect x="226" y="90" width="150" height="76" rx="16" fill="#ecfeff" stroke="#a5f3fc"></rect><text x="260" y="122" font-weight="800" fill="#155e75">Alarm</text><text x="252" y="148">Scheduled</text>
+        <rect x="422" y="90" width="160" height="76" rx="16" fill="#f5f3ff" stroke="#ddd6fe"></rect><text x="454" y="122" font-weight="800" fill="#6d28d9">Session</text><text x="452" y="148">Timer starts</text>
+        <rect x="628" y="90" width="160" height="76" rx="16" fill="#fff7ed" stroke="#fed7aa"></rect><text x="656" y="122" font-weight="800" fill="#9a3412">Capture</text><text x="648" y="148">Screenshots</text>
+        <rect x="834" y="90" width="160" height="76" rx="16" fill="#f0fdf4" stroke="#bbf7d0"></rect><text x="862" y="122" font-weight="800" fill="#166534">Result</text><text x="858" y="148">Score saved</text>
+      </g>
+      <path d="M180 128 H226" stroke="#475569" stroke-width="3" marker-end="url(#arrow4)"></path>
+      <path d="M376 128 H422" stroke="#475569" stroke-width="3" marker-end="url(#arrow4)"></path>
+      <path d="M582 128 H628" stroke="#475569" stroke-width="3" marker-end="url(#arrow4)"></path>
+      <path d="M788 128 H834" stroke="#475569" stroke-width="3" marker-end="url(#arrow4)"></path>
+      <rect x="92" y="226" width="856" height="58" rx="18" fill="#f8fafc" stroke="#e2e8f0"></rect>
+      <text x="126" y="262" font-size="20" fill="#334155">During an active session, Electron prevents accidental window close and waits for timer completion.</text>
+    </svg>
+    <table>
+      <tr><th>Step</th><th>Main Files</th><th>Outcome</th></tr>
+      <tr><td>Create task</td><td><code>Dashboard.jsx</code>, <code>electron/ipc/todos.js</code></td><td>Todo row is saved with task name, scheduled time, duration.</td></tr>
+      <tr><td>Schedule alarm</td><td><code>electron/services/scheduler.js</code></td><td>Task alarm is registered and later emitted to the renderer.</td></tr>
+      <tr><td>Start session</td><td><code>electron/ipc/session.js</code></td><td>Session row is created and active timer begins.</td></tr>
+      <tr><td>Capture screen</td><td><code>electron/services/screenshot.js</code></td><td>Screenshots are captured and optimized.</td></tr>
+      <tr><td>Complete session</td><td><code>electron/services/ai-worker.js</code></td><td>Model output is converted into score, summary, and distraction details.</td></tr>
+    </table>
+    <span class="page-num">10 / 15</span>
+  </section>
+
+  <section class="page">
+    <div class="section-label">Page 11</div>
+    <h2>Screenshot And Local Model Analysis</h2>
+    <p class="lead">The local analyzer mode uses the trained model file in <code>ml/models/focus-logreg.json</code>. Screenshots become image features, features become probabilities, and probabilities become focused or distracted labels.</p>
+    <svg class="diagram" viewBox="0 0 1040 340" role="img" aria-label="Local AI analysis flow">
+      <defs>
+        <marker id="arrow5" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto">
+          <path d="M0,0 L10,4 L0,8 Z" fill="#475569"></path>
+        </marker>
+      </defs>
+      <rect x="54" y="62" width="200" height="76" rx="16" fill="#eef2ff" stroke="#c7d2fe"></rect>
+      <text x="86" y="107" font-size="20" font-weight="800" fill="#312e81">Screenshot</text>
+      <rect x="320" y="62" width="200" height="76" rx="16" fill="#ecfeff" stroke="#a5f3fc"></rect>
+      <text x="350" y="107" font-size="20" font-weight="800" fill="#155e75">Compression</text>
+      <rect x="586" y="62" width="200" height="76" rx="16" fill="#fff7ed" stroke="#fed7aa"></rect>
+      <text x="620" y="107" font-size="20" font-weight="800" fill="#9a3412">Features</text>
+      <rect x="320" y="210" width="200" height="76" rx="16" fill="#f5f3ff" stroke="#ddd6fe"></rect>
+      <text x="348" y="255" font-size="20" font-weight="800" fill="#6d28d9">Local Model</text>
+      <rect x="586" y="210" width="200" height="76" rx="16" fill="#f0fdf4" stroke="#bbf7d0"></rect>
+      <text x="618" y="255" font-size="20" font-weight="800" fill="#166534">Prediction</text>
+      <path d="M254 100 H320" stroke="#475569" stroke-width="3" marker-end="url(#arrow5)"></path>
+      <path d="M520 100 H586" stroke="#475569" stroke-width="3" marker-end="url(#arrow5)"></path>
+      <path d="M686 138 C686 178 526 188 486 210" stroke="#475569" stroke-width="3" fill="none" marker-end="url(#arrow5)"></path>
+      <path d="M520 248 H586" stroke="#475569" stroke-width="3" marker-end="url(#arrow5)"></path>
+      <text x="804" y="245" font-size="18" fill="#334155">focused or distracted</text>
+    </svg>
+    <div class="grid-2">
+      <div class="card"><strong>Analyzer switch</strong><code>FOCUS_ANALYZER=local</code><br><span class="small">Enables the local trained model in the app.</span></div>
+      <div class="card"><strong>Model file</strong><code>ml/models/focus-logreg.json</code><br><span class="small">Created by the training script.</span></div>
+      <div class="card"><strong>Feature source</strong><code>ml/lib/common.js</code><br><span class="small">Extracts color, brightness, saturation, edge, grid, and histogram features.</span></div>
+      <div class="card"><strong>Runtime worker</strong><code>electron/services/ai-worker.js</code><br><span class="small">Calls predictor logic during session completion.</span></div>
+    </div>
+    <pre>{
+  "focusScore": 80,
+  "total": 10,
+  "focused": 8,
+  "distracted": 2,
+  "summary": "Local trained model analyzed 10 screenshots."
+}</pre>
+    <span class="page-num">11 / 15</span>
+  </section>
+
+  <section class="page">
+    <div class="section-label">Page 12</div>
+    <h2>Database ER Diagram</h2>
+    <p class="lead">The Prisma schema contains three main models: User, Todo, and Session. The ER diagram below is included directly in the PDF so the database relations are visible without opening the code.</p>
+    <svg class="diagram" viewBox="0 0 1040 560" role="img" aria-label="Database ER diagram">
+      <defs>
+        <marker id="arrow6" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto">
+          <path d="M0,0 L10,4 L0,8 Z" fill="#475569"></path>
+        </marker>
+      </defs>
+      <rect x="70" y="70" width="250" height="310" rx="16" fill="#eef2ff" stroke="#c7d2fe"></rect>
+      <rect x="70" y="70" width="250" height="52" rx="16" fill="#4338ca"></rect>
+      <text x="98" y="104" font-size="24" font-weight="800" fill="#fff">User</text>
+      <text x="98" y="150" font-size="17" fill="#334155">PK id Int</text>
+      <text x="98" y="182" font-size="17" fill="#334155">email String unique</text>
+      <text x="98" y="214" font-size="17" fill="#334155">username String?</text>
+      <text x="98" y="246" font-size="17" fill="#334155">passwordHash String</text>
+      <text x="98" y="278" font-size="17" fill="#334155">createdAt DateTime</text>
+      <text x="98" y="326" font-size="16" fill="#475569">Relations: todos, sessions</text>
+
+      <rect x="410" y="70" width="250" height="330" rx="16" fill="#ecfeff" stroke="#a5f3fc"></rect>
+      <rect x="410" y="70" width="250" height="52" rx="16" fill="#0891b2"></rect>
+      <text x="438" y="104" font-size="24" font-weight="800" fill="#fff">Todo</text>
+      <text x="438" y="150" font-size="17" fill="#334155">PK id Int</text>
+      <text x="438" y="182" font-size="17" fill="#334155">FK userId Int</text>
+      <text x="438" y="214" font-size="17" fill="#334155">taskName String</text>
+      <text x="438" y="246" font-size="17" fill="#334155">scheduledTime String</text>
+      <text x="438" y="278" font-size="17" fill="#334155">durationMinutes Int</text>
+      <text x="438" y="310" font-size="17" fill="#334155">isCompleted Boolean</text>
+      <text x="438" y="358" font-size="16" fill="#475569">Relations: user, sessions</text>
+
+      <rect x="750" y="70" width="250" height="410" rx="16" fill="#f0fdf4" stroke="#bbf7d0"></rect>
+      <rect x="750" y="70" width="250" height="52" rx="16" fill="#16a34a"></rect>
+      <text x="778" y="104" font-size="24" font-weight="800" fill="#fff">Session</text>
+      <text x="778" y="150" font-size="17" fill="#334155">PK id Int</text>
+      <text x="778" y="182" font-size="17" fill="#334155">FK userId Int</text>
+      <text x="778" y="214" font-size="17" fill="#334155">FK todoId Int?</text>
+      <text x="778" y="246" font-size="17" fill="#334155">taskName String</text>
+      <text x="778" y="278" font-size="17" fill="#334155">focusScore Float?</text>
+      <text x="778" y="310" font-size="17" fill="#334155">focusedCount Int?</text>
+      <text x="778" y="342" font-size="17" fill="#334155">distractedCount Int?</text>
+      <text x="778" y="374" font-size="17" fill="#334155">screenshotUrls String[]</text>
+      <text x="778" y="422" font-size="16" fill="#475569">Relations: user, todo?</text>
+
+      <path d="M320 136 H410" stroke="#475569" stroke-width="3" marker-end="url(#arrow6)"></path>
+      <path d="M320 282 C466 510 700 510 750 282" stroke="#475569" stroke-width="3" fill="none" marker-end="url(#arrow6)"></path>
+      <text x="380" y="500" font-size="16" fill="#475569">User 1 to many Session</text>
+      <path d="M660 222 H750" stroke="#475569" stroke-width="3" marker-end="url(#arrow6)"></path>
+    </svg>
+    <span class="page-num">12 / 15</span>
+  </section>
+
+  <section class="page">
+    <div class="section-label">Page 13</div>
+    <h2>Database Models And Relations</h2>
+    <p class="lead">This page gives the field-level database documentation for the current Prisma schema.</p>
+    <table class="compact-table">
+      <tr><th>Model</th><th>Field</th><th>Type</th><th>Purpose</th></tr>
+      <tr><td>User</td><td><code>id</code></td><td>Int</td><td>Primary key.</td></tr>
+      <tr><td>User</td><td><code>email</code></td><td>String unique</td><td>Login identifier.</td></tr>
+      <tr><td>User</td><td><code>username</code></td><td>String?</td><td>Optional display name.</td></tr>
+      <tr><td>User</td><td><code>passwordHash</code></td><td>String</td><td>Hashed password from bcrypt.</td></tr>
+      <tr><td>Todo</td><td><code>userId</code></td><td>Int</td><td>Foreign key to User.</td></tr>
+      <tr><td>Todo</td><td><code>taskName</code></td><td>String</td><td>Name of planned focus task.</td></tr>
+      <tr><td>Todo</td><td><code>scheduledTime</code></td><td>String</td><td>Time used by scheduler.</td></tr>
+      <tr><td>Todo</td><td><code>durationMinutes</code></td><td>Int</td><td>Focus session length.</td></tr>
+      <tr><td>Session</td><td><code>userId</code></td><td>Int</td><td>Foreign key to User.</td></tr>
+      <tr><td>Session</td><td><code>todoId</code></td><td>Int?</td><td>Optional link to Todo. Uses SetNull on delete.</td></tr>
+      <tr><td>Session</td><td><code>focusScore</code></td><td>Float?</td><td>Final score after screenshot analysis.</td></tr>
+      <tr><td>Session</td><td><code>focusedCount</code></td><td>Int?</td><td>Number of focused screenshots.</td></tr>
+      <tr><td>Session</td><td><code>distractedCount</code></td><td>Int?</td><td>Number of distracted screenshots.</td></tr>
+      <tr><td>Session</td><td><code>screenshotUrls</code></td><td>String[]</td><td>Saved screenshot paths or URLs.</td></tr>
+    </table>
+    <h3>Relationship Summary</h3>
+    <div class="grid-3">
+      <div class="card"><strong>User to Todo</strong>One user can own many planned tasks.</div>
+      <div class="card"><strong>User to Session</strong>One user can have many completed or active focus sessions.</div>
+      <div class="card"><strong>Todo to Session</strong>A session may belong to a todo. If the todo is deleted, session history remains.</div>
+    </div>
+    <pre>model Session {
+  user User @relation(fields: [userId], references: [id])
+  todo Todo? @relation(fields: [todoId], references: [id], onDelete: SetNull)
+}</pre>
+    <span class="page-num">13 / 15</span>
+  </section>
+
+  <section class="page">
+    <div class="section-label">Page 14</div>
+    <h2>ML Pipeline And Current Model</h2>
+    <p class="lead">The ML folder provides a complete local training workflow. The current fake/demo data was removed and the model was retrained using 64 real labeled screenshots.</p>
+    <svg class="diagram" viewBox="0 0 1040 300" role="img" aria-label="ML pipeline diagram">
+      <defs>
+        <marker id="arrow7" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto">
+          <path d="M0,0 L10,4 L0,8 Z" fill="#475569"></path>
+        </marker>
+      </defs>
+      <rect x="46" y="74" width="150" height="76" rx="16" fill="#eef2ff" stroke="#c7d2fe"></rect><text x="82" y="118" font-size="18" font-weight="800" fill="#312e81">Dataset</text>
+      <rect x="244" y="74" width="170" height="76" rx="16" fill="#ecfeff" stroke="#a5f3fc"></rect><text x="276" y="118" font-size="18" font-weight="800" fill="#155e75">Preprocess</text>
+      <rect x="462" y="74" width="150" height="76" rx="16" fill="#fff7ed" stroke="#fed7aa"></rect><text x="508" y="118" font-size="18" font-weight="800" fill="#9a3412">Train</text>
+      <rect x="660" y="74" width="150" height="76" rx="16" fill="#f5f3ff" stroke="#ddd6fe"></rect><text x="704" y="118" font-size="18" font-weight="800" fill="#6d28d9">Evaluate</text>
+      <rect x="858" y="74" width="150" height="76" rx="16" fill="#f0fdf4" stroke="#bbf7d0"></rect><text x="894" y="118" font-size="18" font-weight="800" fill="#166534">Analyze</text>
+      <path d="M196 112 H244" stroke="#475569" stroke-width="3" marker-end="url(#arrow7)"></path>
+      <path d="M414 112 H462" stroke="#475569" stroke-width="3" marker-end="url(#arrow7)"></path>
+      <path d="M612 112 H660" stroke="#475569" stroke-width="3" marker-end="url(#arrow7)"></path>
+      <path d="M810 112 H858" stroke="#475569" stroke-width="3" marker-end="url(#arrow7)"></path>
+      <text x="72" y="196" font-size="15" fill="#475569">focused/ distracted</text>
+      <text x="266" y="196" font-size="15" fill="#475569">features + split</text>
+      <text x="470" y="196" font-size="15" fill="#475569">logistic regression</text>
+      <text x="660" y="196" font-size="15" fill="#475569">metrics + confusion matrix</text>
+      <text x="858" y="196" font-size="15" fill="#475569">single screenshot prediction</text>
+    </svg>
+    <div class="grid-3">
+      <div class="metric"><span class="value">51</span><span class="label">Training records</span></div>
+      <div class="metric"><span class="value">13</span><span class="label">Evaluation records</span></div>
+      <div class="metric"><span class="value">100%</span><span class="label">Current test accuracy</span></div>
+    </div>
+    <table>
+      <tr><th>Requirement</th><th>File</th><th>Output</th></tr>
+      <tr><td>Dataset preprocessing</td><td><code>ml/preprocess.js</code></td><td><code>ml/processed/dataset.json</code>, train/test JSON.</td></tr>
+      <tr><td>Model training</td><td><code>ml/train.js</code></td><td><code>ml/models/focus-logreg.json</code>, training report.</td></tr>
+      <tr><td>Evaluation</td><td><code>ml/evaluate.js</code></td><td>Accuracy, precision, recall, F1, confusion matrix.</td></tr>
+      <tr><td>Single image analysis</td><td><code>ml/analyze.js</code></td><td>Prediction for one screenshot.</td></tr>
+      <tr><td>Live prediction</td><td><code>ml/lib/predictor.js</code></td><td>Reusable predictor for Electron worker.</td></tr>
+    </table>
+    <div class="warning">The current 100% evaluation result is from a small 13-image test split. It is useful for project demonstration, but a larger dataset is needed for stronger generalization.</div>
+    <span class="page-num">14 / 15</span>
+  </section>
+
+  <section class="page">
+    <div class="section-label">Page 15</div>
+    <h2>Setup, Testing, And Future Work</h2>
+    <p class="lead">This final page gives the commands needed to run the app, train the model, and verify the local analyzer.</p>
+    <div class="grid-2">
+      <div>
+        <h3>Environment</h3>
+        <pre>DATABASE_URL=postgresql://user:pass@localhost:5432/focus-tracker
+FOCUS_ANALYZER=local
+LOCAL_MODEL_PATH=</pre>
+      </div>
+      <div>
+        <h3>App Commands</h3>
+        <pre>npm install
+npm run prisma:generate
+npm run prisma:push
+npm run dev</pre>
+      </div>
+    </div>
+    <h3>ML Commands</h3>
+    <pre>npm run ml:preprocess
+npm run ml:train
+npm run ml:evaluate
+npm run ml:analyze -- ml/dataset/raw/focused/focused_real_001.jpeg
+npm run ml:all</pre>
+    <h3>Manual Testing Checklist</h3>
+    <table>
+      <tr><th>Test</th><th>Expected Result</th></tr>
+      <tr><td>Open a study PDF, report page, code file, or assignment page</td><td>Model should classify it as focused.</td></tr>
+      <tr><td>Open Instagram, Facebook, YouTube, Netflix, game, or sports feed</td><td>Model should classify it as distracted.</td></tr>
+      <tr><td>Create a todo with scheduled time</td><td>Alarm should trigger and show the focus start modal.</td></tr>
+      <tr><td>Complete a focus session</td><td>Session score, focused count, distracted count, and summary should be saved.</td></tr>
+      <tr><td>Open Reports</td><td>Recent sessions and focus chart should be visible.</td></tr>
+    </table>
+    <h3>Future Work</h3>
+    <ul>
+      <li>Collect a larger balanced dataset for focused and distracted screens.</li>
+      <li>Add automated tests for IPC handlers, scheduler behavior, and ML scripts.</li>
+      <li>Add screenshot privacy controls and optional screenshot deletion policies.</li>
+      <li>Add stronger validation for task duration, scheduled time, and active session state.</li>
+      <li>Improve the local model with more robust computer-vision features or a lightweight neural model.</li>
+    </ul>
+    <div class="note">Primary reading companion: <code>docs/CODE_READING_ORDER.md</code>. Use it when you want to understand the files in sequence.</div>
+    <span class="page-num">15 / 15</span>
+  </section>
+</body>
+</html>

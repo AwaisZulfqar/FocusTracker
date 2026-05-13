@@ -1,8 +1,55 @@
+import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ClockIcon, ArrowRight } from '../icons/index.js'
 import styles from './AlarmModal.module.css'
 
 export default function AlarmModal({ alarm, onStart, onDismiss }) {
+  const audioRef = useRef(null)
+
+  useEffect(() => {
+    if (!alarm) return undefined
+
+    let intervalId = null
+    let stopped = false
+
+    function playTone() {
+      if (stopped) return
+
+      const AudioContext = window.AudioContext || window.webkitAudioContext
+      if (!AudioContext) return
+
+      const context = audioRef.current || new AudioContext()
+      audioRef.current = context
+
+      if (context.state === 'suspended') {
+        context.resume().catch(() => {})
+      }
+
+      const oscillator = context.createOscillator()
+      const gain = context.createGain()
+      oscillator.type = 'sine'
+      oscillator.frequency.setValueAtTime(880, context.currentTime)
+      gain.gain.setValueAtTime(0.001, context.currentTime)
+      gain.gain.exponentialRampToValueAtTime(0.18, context.currentTime + 0.02)
+      gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.45)
+
+      oscillator.connect(gain)
+      gain.connect(context.destination)
+      oscillator.start()
+      oscillator.stop(context.currentTime + 0.48)
+    }
+
+    playTone()
+    intervalId = window.setInterval(playTone, 1200)
+
+    return () => {
+      stopped = true
+      window.clearInterval(intervalId)
+      audioRef.current?.close?.()
+      audioRef.current = null
+    }
+  }, [alarm])
+
   return (
     <AnimatePresence>
       {alarm && (

@@ -10,7 +10,13 @@
     "electron": "cross-env NODE_ENV=development electron .",
     "prisma:push": "prisma db push",
     "prisma:studio": "prisma studio",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "ml:preprocess": "node ml/preprocess.js",
+    "ml:train": "node ml/train.js",
+    "ml:evaluate": "node ml/evaluate.js",
+    "ml:analyze": "node ml/analyze.js",
+    "ml:all": "npm run ml:preprocess && npm run ml:train && npm run ml:evaluate",
+    "ml:demo-data": "node ml/generate-demo-dataset.js"
   },
   "keywords": [],
   "author": "",
@@ -18,7 +24,7 @@
   "build": {
     "appId": "com.focustracker.app",
     "productName": "FocusTracker",
-    "files": ["electron/**/*", "dist/**/*", "node_modules/**/*"],
+    "files": ["electron/**/*", "dist/**/*", "node_modules/**/*", "ml/lib/**/*", "ml/models/**/*"],
     "linux": { "icon": "electron/assets/icon.png", "target": ["AppImage"] },
     "win": { "icon": "electron/assets/icon.png" },
     "mac": { "icon": "electron/assets/icon.png" }

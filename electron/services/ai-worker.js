@@ -1,5 +1,7 @@
+const fs = require('fs')
+const path = require('path')
 const { workerData, parentPort } = require('worker_threads')
-const { InferenceClient } = require('@huggingface/inference')
+const { loadModel, predictImage } = require('../../ml/lib/predictor')
 
 function sampleEvenly(arr, n) {
   if (arr.length <= n) return arr
@@ -7,18 +9,77 @@ function sampleEvenly(arr, n) {
   return Array.from({ length: n }, (_, i) => arr[Math.floor(i * step)])
 }
 
-async function analyzeScreenshots() {
-  const { screenshotUrls, taskName } = workerData
+function isUrl(value) {
+  return /^https?:\/\//i.test(value)
+}
 
-  if (screenshotUrls.length === 0) {
-    parentPort.postMessage({
-      focusScore: 0, total: 0, focused: 0, distracted: 0,
-      summary: 'No screenshots captured during this session.',
-      distractionDetails: 'N/A',
-    })
-    return
+function useLocalAnalyzer() {
+  return process.env.FOCUS_ANALYZER === 'local' || !process.env.HF_TOKEN
+}
+
+function emptyResult() {
+  return {
+    focusScore: 0,
+    total: 0,
+    focused: 0,
+    distracted: 0,
+    summary: 'No screenshots captured during this session.',
+    distractionDetails: 'N/A',
+    analyzer: 'local',
+  }
+}
+
+async function analyzeWithLocalModel(screenshotPaths, taskName) {
+  const modelPath = process.env.LOCAL_MODEL_PATH || path.resolve(__dirname, '../../ml/models/focus-logreg.json')
+
+  if (!fs.existsSync(modelPath)) {
+    throw new Error(`Local model not found at ${modelPath}. Run: npm run ml:preprocess && npm run ml:train`)
   }
 
+  const localPaths = screenshotPaths.filter((item) => !isUrl(item) && fs.existsSync(item))
+
+  if (localPaths.length === 0) {
+    throw new Error('Local analyzer needs local screenshot files, but none were found.')
+  }
+
+  const model = loadModel(modelPath)
+  const predictions = []
+
+  for (const imagePath of localPaths) {
+    predictions.push(await predictImage(model, imagePath))
+  }
+
+  const focused = predictions.filter((item) => item.predicted === 'focused').length
+  const distracted = predictions.length - focused
+  const focusScore = predictions.length === 0 ? 0 : (focused / predictions.length) * 100
+  const lowConfidence = predictions.filter((item) => {
+    const confidence = item.predicted === 'focused'
+      ? item.probabilityFocused
+      : 1 - item.probabilityFocused
+    return confidence < 0.65
+  }).length
+
+  const distractedIndexes = predictions
+    .map((item, index) => ({ ...item, index: index + 1 }))
+    .filter((item) => item.predicted === 'distracted')
+    .map((item) => `#${item.index} (${(100 - item.focusScore).toFixed(0)}% distracted)`)
+
+  return {
+    focusScore: Number(focusScore.toFixed(2)),
+    total: predictions.length,
+    focused,
+    distracted,
+    summary: `Local trained model analyzed ${predictions.length} screenshots for "${taskName}". It classified ${focused} as focused and ${distracted} as distracted.`,
+    distractionDetails: distractedIndexes.length > 0
+      ? `Likely distracted screenshots: ${distractedIndexes.join(', ')}.`
+      : `None detected by the local model${lowConfidence > 0 ? `; ${lowConfidence} predictions were low confidence.` : '.'}`,
+    analyzer: 'local',
+    modelPath,
+  }
+}
+
+async function analyzeWithHuggingFace(screenshotUrls, taskName) {
+  const { InferenceClient } = require('@huggingface/inference')
   const client = new InferenceClient(process.env.HF_TOKEN)
 
   const sampled = sampleEvenly(screenshotUrls, 10)
@@ -43,36 +104,49 @@ Return ONLY valid JSON with no extra text:
   "distraction_details": "<what specific distractions were noticed, or 'None' if fully focused>"
 }`
 
+  const response = await client.chatCompletion({
+    model: 'meta-llama/Llama-4-Scout-17B-16E-Instruct',
+    messages: [{
+      role: 'user',
+      content: [...imageContents, { type: 'text', text: prompt }],
+    }],
+    max_tokens: 512,
+  })
+
+  const raw = response.choices[0].message.content
+  const jsonMatch = raw.match(/\{[\s\S]*\}/)
+  if (!jsonMatch) throw new Error('No JSON found in AI response')
+
+  const parsed = JSON.parse(jsonMatch[0])
+
+  return {
+    focusScore: parsed.focus_percentage,
+    total: screenshotUrls.length,
+    focused: parsed.focused,
+    distracted: parsed.distracted,
+    summary: parsed.summary,
+    distractionDetails: parsed.distraction_details,
+    analyzer: 'huggingface',
+  }
+}
+
+async function analyzeScreenshots() {
+  const { screenshotUrls, taskName } = workerData
+
+  if (screenshotUrls.length === 0) {
+    parentPort.postMessage(emptyResult())
+    return
+  }
+
   try {
-    const response = await client.chatCompletion({
-      model: 'meta-llama/Llama-4-Scout-17B-16E-Instruct',
-      messages: [{
-        role: 'user',
-        content: [...imageContents, { type: 'text', text: prompt }],
-      }],
-      max_tokens: 512,
-    })
+    const result = useLocalAnalyzer()
+      ? await analyzeWithLocalModel(screenshotUrls, taskName)
+      : await analyzeWithHuggingFace(screenshotUrls, taskName)
 
-    const raw = response.choices[0].message.content
-    const jsonMatch = raw.match(/\{[\s\S]*\}/)
-    if (!jsonMatch) throw new Error('No JSON found in AI response')
-
-    const parsed = JSON.parse(jsonMatch[0])
-
-    parentPort.postMessage({
-      focusScore: parsed.focus_percentage,
-      total: screenshotUrls.length,
-      focused: parsed.focused,
-      distracted: parsed.distracted,
-      summary: parsed.summary,
-      distractionDetails: parsed.distraction_details,
-    })
+    parentPort.postMessage(result)
   } catch (err) {
-    console.error('[ai-worker] HF inference error:', {
+    console.error('[ai-worker] analysis error:', {
       message: err.message,
-      status: err.status,
-      response: err.response,
-      cause: err.cause,
       stack: err.stack,
     })
     parentPort.postMessage({
@@ -80,8 +154,9 @@ Return ONLY valid JSON with no extra text:
       total: screenshotUrls.length,
       focused: 0,
       distracted: screenshotUrls.length,
-      summary: `AI analysis failed: ${err.message}`,
+      summary: `Analysis failed: ${err.message}`,
       distractionDetails: 'Analysis unavailable',
+      analyzer: useLocalAnalyzer() ? 'local' : 'huggingface',
     })
   }
 }

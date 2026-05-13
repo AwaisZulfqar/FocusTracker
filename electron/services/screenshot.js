@@ -43,6 +43,31 @@ async function captureViaElectron(rawPath) {
   return true
 }
 
+function isLocalAnalyzerMode() {
+  return process.env.FOCUS_ANALYZER === 'local' || !process.env.HF_TOKEN
+}
+
+function hasR2Config() {
+  return Boolean(
+    process.env.R2_ACCOUNT_ID &&
+    process.env.R2_ACCESS_KEY_ID &&
+    process.env.R2_SECRET_ACCESS_KEY &&
+    process.env.R2_BUCKET_NAME &&
+    process.env.R2_PUBLIC_URL
+  )
+}
+
+function saveLocalScreenshot(outPath, sessionId, index) {
+  const sessionDir = path.join(app.getPath('userData'), 'focus-screenshots', 'sessions', String(sessionId))
+  fs.mkdirSync(sessionDir, { recursive: true })
+
+  const finalPath = path.join(sessionDir, `screenshot_${String(index).padStart(3, '0')}.jpg`)
+  fs.copyFileSync(outPath, finalPath)
+  fs.unlinkSync(outPath)
+
+  return finalPath
+}
+
 async function captureAndUpload(sessionId, index) {
   const rawPath = path.join(app.getPath('temp'), `ft_raw_${Date.now()}.png`)
   const outPath = path.join(app.getPath('temp'), `ft_cap_${Date.now()}.jpg`)
@@ -59,6 +84,10 @@ async function captureAndUpload(sessionId, index) {
     await sharp(rawPath).resize(1280, 720, { fit: 'inside' }).jpeg({ quality: 70 }).toFile(outPath)
 
     if (fs.existsSync(rawPath)) fs.unlinkSync(rawPath)
+
+    if (isLocalAnalyzerMode() || !hasR2Config()) {
+      return saveLocalScreenshot(outPath, sessionId, index)
+    }
 
     return await uploadScreenshot(outPath, sessionId, index)
   } catch (err) {
